@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import json
+import os
 
 app = Flask(__name__)
 
@@ -30,7 +31,12 @@ def get_balance(bip_id):
     return int((data['saldoTarjeta']).replace(u'.', u'').replace(u'$', u''))
 
 def get_payments(bip_id):
-    driver = webdriver.Firefox()
+
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--no-sandbox')
+    driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
 
     driver.get(f'http://pocae.tstgo.cl/PortalCAE-WAR-MODULE/SesionPortalServlet?accion=6&NumDistribuidor=99&NomUsuario=usuInternet&NomHost=AFT&NomDominio=aft.cl&Trx=&RutUsuario=0&NumTarjeta={bip_id}&bloqueable=')
 
