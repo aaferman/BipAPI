@@ -30,3 +30,4 @@ __pycache__
 geckodriver.log
 *.pyc
 build
+.vscode/
