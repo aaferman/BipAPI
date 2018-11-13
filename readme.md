@@ -2,7 +2,7 @@
 
 BipAPI is a web scraper that exposes a Rest API to access Chile's public transport Bip! card's history.
 
-Currently live at [bipapi.herokuapp.com](bipapi.herokuapp.com)
+Currently live at [bipapi.herokuapp.com](https://bipapi.herokuapp.com)
 
 
 ### Installation
@@ -22,7 +22,27 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt 
 ```
 
-You may need to also install [Selenium Web Driver](https://www.seleniumhq.org/) and [Chrome](https://www.google.com/chrome/)
+You may need to also install [Selenium Web Driver](https://www.seleniumhq.org/) and [Chrome](https://www.google.com/chrome/) on your system.
+
+
+### Deploying to Heroku
+
+When deploying to Heroku you will need to set de following variables:
+```sh
+CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
+ENV = 'HEROKU'
+```
+
+Add 3 extra buildpacks:
+* https://github.com/notvad/heroku-buildpack-selenium.git
+* https://github.com/heroku/heroku-buildpack-xvfb-google-chrome
+* https://github.com/heroku/heroku-buildpack-chromedriver
+
+And set the stack to Cedar-14 (It's deprecated, I know)
+```sh
+heroku stack:set cedar-14 -a <app-name>
+```
 
 
 ## API Resources
