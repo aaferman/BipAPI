@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Readme at https://github.com/aaferman/BipAPI/'
+    return 'Readme at <a href="https://github.com/aaferman/BipAPI/">https://github.com/aaferman/BipAPI/</a>'
 
 
 @app.route('/<int:bip_id>')
@@ -36,13 +36,17 @@ def get_balance(bip_id):
 
     return int((data['saldoTarjeta']).replace(u'.', u'').replace(u'$', u''))
 
+
 def get_payments(bip_id):
 
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--no-sandbox')
-    driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
+    if 'ENV' in os.environ and os.environ['ENV'] == 'HEROKU':
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
+        driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
+    else:
+        driver = webdriver.Chrome()
 
     driver.get(f'http://pocae.tstgo.cl/PortalCAE-WAR-MODULE/SesionPortalServlet?accion=6&NumDistribuidor=99&NomUsuario=usuInternet&NomHost=AFT&NomDominio=aft.cl&Trx=&RutUsuario=0&NumTarjeta={bip_id}&bloqueable=')
 
