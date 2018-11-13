@@ -7,12 +7,18 @@ import os
 
 app = Flask(__name__)
 
+
+@app.route('/')
+def index():
+    return 'Readme at https://github.com/aaferman/BipAPI/'
+
+
 @app.route('/<int:bip_id>')
 def get_info(bip_id):
 
     bip_data = {}
     bip_data['ID'] = bip_id
-    bip_data['current_count'] = get_balance(bip_id)
+    bip_data['current_balance'] = get_balance(bip_id)
     bip_data['payments'] = get_payments(bip_id)[0]
     bip_data['uses'] = get_payments(bip_id)[1]
 
