@@ -16,10 +16,10 @@ def index():
 
 @app.route('/<int:bip_id>')
 def get_info(bip_id):
-
+    print('Request: ' + str(bip_id))
     db = redis.from_url(os.environ.get("REDIS_URL"))
     if (db.get(bip_id)):
-        return json.dumps(db.get(bip_id), sort_keys=True, indent=4, separators=(',', ': '))
+        return json.dumps(json.loads(db.get(bip_id)), sort_keys=True, indent=4, separators=(',', ': '))
 
     bip_data = {}
     bip_data['ID'] = bip_id
@@ -27,7 +27,7 @@ def get_info(bip_id):
     bip_data['payments'] = get_payments(bip_id)[0]
     bip_data['uses'] = get_payments(bip_id)[1]
 
-    db.set('bip_id', bip_data)
+    db.set(bip_id, json.dumps(bip_data))
 
     return json.dumps(bip_data, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -84,5 +84,3 @@ def get_payments(bip_id):
 
     return payments, uses
 
-
-    
